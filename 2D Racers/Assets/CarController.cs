@@ -32,11 +32,10 @@ public class CarController : MonoBehaviour
     void FixedUpdate()
     {
         float speed = Input.GetAxis("Vertical");
-        Vector3 nextVel = car_rb.velocity + (transform.forward * Mathf.RoundToInt(speed) * 50);
-        print(nextVel.magnitude);
+        Vector3 nextVel = transform.forward * speed * maxSpeed;
         if (nextVel.magnitude > minSpeed && nextVel.magnitude < maxSpeed)
         {
-            car_rb.velocity += nextVel;
+            car_rb.velocity = nextVel;
         }
     }
 }
