@@ -3,23 +3,28 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class RandGenManager : MonoBehaviour
+public class RandGenManager
 {
     float xRand;
     float yRand;
     float zRand;
     List<Vector3> points = new List<Vector3>();
-    List<Vector3> hull = new List<Vector3>();
-    List<Vector3> sortedPoints = new List<Vector3>();
+    public List<Vector3> hull = new List<Vector3>();
+    public List<Vector3> sortedPoints = new List<Vector3>();
     public CatmullRom spline;
     List<Transform> sortedTrans = new List<Transform>();
+    float easy = 1f;
+    float med = .5f;
+    float hard = .25f;
+    Path path;
+    PathEditor editor;
 
     // Start is called before the first frame update
-    void Start()
+    public void Start()
     {
         int seed = (int)(System.DateTime.UtcNow - new System.DateTime(1970, 1, 1, 0, 0, 0, System.DateTimeKind.Utc)).TotalSeconds;
         Random.InitState(seed);
-        Debug.Log(Random.seed.ToString());
+        //Debug.Log(Random.seed.ToString());
         int randVal = Random.RandomRange(10, 20);
         //for rand iterations create rand new points of random positions and put them in a list
         for (int i = 0; i < randVal; i++)
@@ -30,7 +35,7 @@ public class RandGenManager : MonoBehaviour
             zRand = Random.Range(-150f, 150f);
 
             //Print those values to debug
-            Debug.Log("(Point " + i + ") x: " + xRand.ToString() + " z: " + zRand.ToString());
+            //Debug.Log("(Point " + i + ") x: " + xRand.ToString() + " z: " + zRand.ToString());
 
             //create a temporary point
             Vector3 temp = new Vector3(xRand, yRand, zRand);
@@ -44,36 +49,44 @@ public class RandGenManager : MonoBehaviour
 
         //Generate the convex hull based on points
         hull = convexHull(sortedPoints, 0, randVal);
+  
 
         //for loop to push several points apart
         int pushIterator = 3;
-        for (int i = 0; i < pushIterator; i++)
-        {
-            pullPointsApart(hull);
-        }
+        //for (int i = 0; i < pushIterator; i++)
+        //{
+        //    pullPointsApart(hull);
+        //}
 
         //add more points to the convex hull
-        List<Vector3> rSet = new List<Vector3>(sortedPoints.Capacity * 2);
+        List<Vector3> rSet = new List<Vector3>(hull.Capacity * 2);
         Vector3 disp = new Vector3();
-        float diff = 1f;
+        float diff = easy;
         float maxDisp = 20f;
-        for (int i = 0; i < sortedPoints.Count; ++i)
-        {
-            float dispLen = (float)Mathf.Pow(Random.Range(0.0f, 1.0f), diff) * maxDisp;
-            disp.Set(0, 0, 1);
-            disp = Quaternion.AngleAxis(Random.Range(0.0f, 1.0f) * 360, new Vector3(Random.Range(0.0f, 1.0f), 0, Random.Range(0.0f, 1.0f))) * disp;
-            disp.Scale(new Vector3(dispLen, 0, dispLen));
-            rSet[i * 2] = sortedPoints[i];
-            rSet[(i * 2) + 1] = new Vector3(sortedPoints[i].x, sortedPoints[i].y, sortedPoints[i].z);
-            rSet[(i * 2) + 1] = (rSet[(i + 2) + 1] + sortedPoints[(i + 1) % sortedPoints.Count] / 2) + disp;
-        }
-        sortedPoints = rSet;
+        //for (int i = 0; i < hull.Count; i++)
+        //{
+        //    float dispLen = (float)Mathf.Pow(Random.Range(0.0f, 1.0f), diff) * maxDisp;
+        //    disp.Set(0, 0, 1);
+        //    disp = Quaternion.AngleAxis(Random.Range(0.0f, 1.0f) * 360, new Vector3(Random.Range(0.0f, 1.0f), 0, Random.Range(0.0f, 1.0f))) * disp;
+        //    disp.Scale(new Vector3(dispLen, 0, dispLen));
+        //    rSet.Insert(i * 2, hull[i]);
+        //    rSet.Insert((i*2)+1, new Vector3(hull[i].x, hull[i].y, hull[i].z));
+        //    rSet[(i * 2) + 1] += (rSet[i + 1] + hull[(i + 1) % hull.Count] / 2f) + disp;
+        //}
+
+        //hull = rSet;
+
+        //debugs
+        //for (int i = 0; i < rSet.Count; i++)
+        //{
+        //    //Debug.Log("(Points " + i + ") " + rSet[i].x + " & " + rSet[i].z);
+        //}
 
         //push apart again
-        for (int i = 0; i < pushIterator; i++)
-        {
-            pullPointsApart(hull);
-        }
+        //for (int i = 0; i < pushIterator; i++)
+        //{
+        //   // pullPointsApart(hull);
+        //}
 
         //fixes angle issues and pushes 
         for (int i = 0; i < 10; i++)
@@ -83,23 +96,43 @@ public class RandGenManager : MonoBehaviour
         }
 
         //adds curves to track
-        splineCode(sortedPoints);
+        splineCode(hull);
 
         //lifts y coordinates
-        for (int i = 0; i < sortedPoints.Count; i++)
+        for (int i = 0; i < hull.Count; i++)
         {
-            float xVal = sortedPoints[i].x;
+            float xVal = hull[i].x;
             float yVal = Random.Range(0f, 10f);
-            float zVal = sortedPoints[i].z;
+            float zVal = hull[i].z;
 
-            sortedPoints[i].Set(xVal, yVal, zVal);
+            hull[i].Set(xVal, yVal, zVal);
+        }
+
+        //debugs
+        //for (int i = 0; i < rSet.Count; i++)
+        //{
+        //    //Debug.Log("(Points " + i + ") " + rSet[i].x + " & " + rSet[i].y + " & " + rSet[i].z);
+        //}
+        ClockwiseVector3Comparer sorter = new ClockwiseVector3Comparer();
+        hull.Sort(sorter);
+
+       
+        for (int i= hull.Count - 1; i >0; i--)
+        {
+            if (hull[i] == hull[i - 1])
+            {
+                hull.RemoveAt(i);
+            }
+        }
+        for (int i = 0; i < hull.Count; i++)
+        {
+            Debug.Log(hull[i]);
         }
     }
 
     //creates a spline for lines
     private void splineCode(List<Vector3> p)
     {
-        
     }
 
     //generates a convex hull
@@ -107,44 +140,52 @@ public class RandGenManager : MonoBehaviour
     {
         List<Vector3> newHull = new List<Vector3>(p);
         int end = offset + count;
-        int size = newHull.Count;
+        int size = p.Count;
+        Vector3 origin = new Vector3(0, 0, 0);
 
         newHull.Clear();
 
         //Lower Hull
-        for(int i = offset; i < end; i++)
+        for (int i = offset; i < end; i++)
         {
             Vector3 point = p[i];
-            while (size >= 3 && ccw(point.x, point.z) <= 0)
+            if (i != 0)
             {
-                size -= 1;
+                while (size >= 3 && ccw(p[i], p[i - 1], origin))
+                {
+                    size -= 1;
+                }
+                newHull.Add(point);
             }
-            hull.Add(point);
+
         }
 
         //upper hull
-        for(int i = end - 2, t = size + 1; i >= offset; i--)
+        for (int i = end - 2, t = size + 1; i >= offset; i--)
         {
             Vector3 point = p[i];
-            while (size >= t && ccw(point.x, point.z) <= 0)
+            if (i != 0)
             {
-                size -= 1;
+                while (size >= t && ccw(p[i], p[i - 1], origin))
+                {
+                    size -= 1;
+                }
+                newHull.Add(point);
             }
-            hull.Add(point);
         }
 
         return newHull;
     }
 
     //returns > 0 if counter clockwise, if clockwise return < 0, if colinear returns = 0
-    private float ccw(float p3x, float p3z)
+    private float ccw(float p3x, float p3z, List<Vector3> p)
     {
-        List<Vector3> newHull = new List<Vector3>(hull);
-        int size = hull.Count;
-        float p1x = hull[size - 4].x;
-        float p1z = hull[size - 3].z;
-        float p2x = hull[size - 2].x;
-        float p2z = hull[size - 1].z;
+        List<Vector3> newHull = new List<Vector3>(p);
+        int size = p.Capacity;
+        float p1x = newHull[size - 2].x;
+        float p1z = newHull[size - 2].z;
+        float p2x = newHull[size - 1].x;
+        float p2z = newHull[size - 1].z;
         return (p2x - p1x) * (p3z - p1z) - (p2z - p1z) * (p3x - p1x);
     }
 
@@ -169,7 +210,7 @@ public class RandGenManager : MonoBehaviour
 
         for(int i = 0; i < n; i++)
         {
-                if(sortedP[i+1] != null)
+                if(i+1 < sortedP.Count)
                 {
                     if(sortedP[i].x == sortedP[i+1].x)
                     {
@@ -262,5 +303,54 @@ public class RandGenManager : MonoBehaviour
         float zd = v1.z - v2.z;
         return (xd * xd) + (zd * zd);
     }
+
+    private bool ccw(Vector3 first, Vector3 second, Vector3 origin)
+    {
+        if (first == second)
+        {
+            return false;
+        }
+
+        Vector3 fOffest = first - origin;
+        Vector3 sOffest = second - origin;
+
+        float angle1 = Mathf.Atan2(fOffest.x, fOffest.z);
+        float angle2 = Mathf.Atan2(sOffest.x, sOffest.z);
+
+        if (angle1 < angle2)
+        {
+            return true;
+        }
+        else if (angle1 > angle2)
+        {
+            return false;
+        }
+        else
+        {
+            return false;
+        }
+    }
 }
 
+public class ClockwiseVector3Comparer : IComparer<Vector3>
+{
+    public int Compare(Vector3 v1, Vector3 v2)
+    {
+        if (v1.x >= 0)
+        {
+            if (v2.x < 0)
+            {
+                return -1;
+            }
+            return -Comparer<float>.Default.Compare(v1.z, v2.z);
+        }
+        else
+        {
+            if (v2.x >= 0)
+            {
+                return 1;
+            }
+            return Comparer<float>.Default.Compare(v1.z, v2.z);
+        }
+    }
+}
