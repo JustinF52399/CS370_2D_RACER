@@ -22,6 +22,11 @@ public class RandGenManager
     // Start is called before the first frame update
     public void Start()
     {
+        points.Clear();
+        hull.Clear();
+        sortedPoints.Clear();
+        sortedTrans.Clear();
+
         int seed = (int)(System.DateTime.UtcNow - new System.DateTime(1970, 1, 1, 0, 0, 0, System.DateTimeKind.Utc)).TotalSeconds;
         Random.InitState(seed);
         //Debug.Log(Random.seed.ToString());
@@ -53,10 +58,10 @@ public class RandGenManager
 
         //for loop to push several points apart
         int pushIterator = 3;
-        //for (int i = 0; i < pushIterator; i++)
-        //{
-        //    pullPointsApart(hull);
-        //}
+        for (int i = 0; i < pushIterator; i++)
+        {
+            pullPointsApart(hull);
+       }
 
         //add more points to the convex hull
         List<Vector3> rSet = new List<Vector3>(hull.Capacity * 2);
@@ -83,10 +88,10 @@ public class RandGenManager
         //}
 
         //push apart again
-        //for (int i = 0; i < pushIterator; i++)
-        //{
-        //   // pullPointsApart(hull);
-        //}
+        for (int i = 0; i < pushIterator; i++)
+        {
+            pullPointsApart(hull);
+        }
 
         //fixes angle issues and pushes 
         for (int i = 0; i < 10; i++)
@@ -96,7 +101,7 @@ public class RandGenManager
         }
 
         //adds curves to track
-        splineCode(hull);
+        //splineCode(hull);
 
         //lifts y coordinates
         for (int i = 0; i < hull.Count; i++)

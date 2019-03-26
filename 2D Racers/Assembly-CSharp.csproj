@@ -60,11 +60,15 @@
      <Compile Include="Assets\Scripts\Point3.cs" />
      <Compile Include="Assets\Scripts\Point4.cs" />
      <Compile Include="Assets\Scripts\Point5.cs" />
+     <Compile Include="Assets\Scripts\RandFile\Bezier.cs" />
      <Compile Include="Assets\Scripts\RandFile\CatmullRom.cs" />
+     <Compile Include="Assets\Scripts\RandFile\Examples\PathPlacer.cs" />
+     <Compile Include="Assets\Scripts\RandFile\Examples\RoadCreator.cs" />
      <Compile Include="Assets\Scripts\RandFile\Path.cs" />
      <Compile Include="Assets\Scripts\RandFile\PathCreator.cs" />
      <Compile Include="Assets\Scripts\RandFile\PathEditor.cs" />
      <Compile Include="Assets\Scripts\RandFile\RandGenManager.cs" />
+     <Compile Include="Assets\Scripts\RandFile\RoadEditor.cs" />
      <Compile Include="Assets\Scripts\RandFile\Vertex.cs" />
      <Compile Include="Assets\Scripts\RoadScript.cs" />
      <Compile Include="Assets\Scripts\Speedbump.cs" />

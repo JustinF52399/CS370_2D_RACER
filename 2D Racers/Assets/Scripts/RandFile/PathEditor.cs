@@ -26,16 +26,20 @@ public class PathEditor : Editor
         {
             Undo.RecordObject(creator, "Create new");
             path.ClearPoints();
-            manager = new RandGenManager();
-            path = null;           
+            manager.Start();
+            path = null;
+            Restart();
 
         }
-        if (GUILayout.Button("Toggle Closed"))
+        
+        bool isClosed = GUILayout.Toggle(path.IsClosed, "Closed");
+        if(isClosed != path.IsClosed)
         {
             Undo.RecordObject(creator, "Toggle closed");
-            path.ToggleClosed();
+            path.IsClosed = isClosed;
 
         }
+        
         bool autoSetControlPoints = GUILayout.Toggle(path.AutoSetControlPoints, "Auto Set Control Points");
         if (autoSetControlPoints != path.AutoSetControlPoints)
         {
@@ -46,6 +50,7 @@ public class PathEditor : Editor
         {
             SceneView.RepaintAll();
         }
+        
     }
 
     void OnSceneGUI()
@@ -65,8 +70,56 @@ public class PathEditor : Editor
         Vector3 mousePos = mouseRay.GetPoint(dstToDrawPlane);
         if (guiEvent.type == EventType.MouseDown && guiEvent.button == 0 && guiEvent.shift)
         {
-            Undo.RecordObject(creator, "Add segment");
-            path.AddSegment(mousePos);
+            if (selectedSegmentIndex != -1)
+            {
+                Undo.RecordObject(creator, "Split segment");
+                path.SplitSegment(mousePos, selectedSegmentIndex);
+            }
+            else if(!path.IsClosed)
+            {
+
+                Undo.RecordObject(creator, "Add segment");
+                path.AddSegment(mousePos);
+            }
+        }
+        if(guiEvent.type == EventType.MouseDown && guiEvent.button == 1)
+        {
+            float minDstToAnchor = creator.anchorDiameter *.5f;
+            int closestAnchorIndex = -1;
+            for (int i = 0; i < path.NumPoints; i+=3)
+            {
+                float dst = Vector3.Distance(mousePos, path[i]);
+                if(dst < minDstToAnchor)
+                {
+                    minDstToAnchor = dst;
+                    closestAnchorIndex = i;
+                }
+            }
+            if(closestAnchorIndex != -1)
+            {
+                Undo.RecordObject(creator, "Delete Segment");
+                path.DeleteSegment(closestAnchorIndex);
+            }
+        }
+        if (guiEvent.type == EventType.MouseMove)
+        {
+            float minDstToSegment = segemntSelectDstThreshold;
+            int newSelectedSegmentIndex = -1;
+            for (int i = 0; i < path.NumSegments; i++)
+            {
+                Vector3[] points = path.GetPointsInSegment(i);
+                float dst = HandleUtility.DistancePointBezier(mousePos, points[0], points[3], points[1], points[2]);
+                if (dst < minDstToSegment)
+                {
+                    minDstToSegment = dst;
+                    newSelectedSegmentIndex = i;
+                }
+            }
+            if(newSelectedSegmentIndex != selectedSegmentIndex)
+            {
+                selectedSegmentIndex = newSelectedSegmentIndex;
+                HandleUtility.Repaint();
+            }
         }
     }
 
@@ -75,19 +128,28 @@ public class PathEditor : Editor
         for (int i = 0; i < path.NumSegments; i++)
         {
             Vector3[] points = path.GetPointsInSegment(i);
-            Handles.color = Color.black;
-            Handles.DrawLine(points[1], points[0]);
-            Handles.DrawLine(points[2], points[3]);
-            Handles.DrawBezier(points[0], points[3], points[1], points[2], Color.green, null, 2);
+            if (creator.displayControlPoints)
+            {
+                Handles.color = Color.black;
+                Handles.DrawLine(points[1], points[0]);
+                Handles.DrawLine(points[2], points[3]);
+            }
+            Color segmentColor = (i == selectedSegmentIndex && Event.current.shift) ? creator.selectedSegmentColor : creator.segmentColor;
+            Handles.DrawBezier(points[0], points[3], points[1], points[2], segmentColor, null, 2);
         }
-        Handles.color = Color.red;
+        
         for (int i = 0; i < path.NumPoints; i++)
         {
-            Vector3 newPos = Handles.FreeMoveHandle(path[i], Quaternion.identity, .1f, new Vector3(0, 1000000000000000000, 0), Handles.CylinderHandleCap);
-            if (path[i] != newPos)
+            if (i % 3 == 0 || creator.displayControlPoints)
             {
-                Undo.RecordObject(creator, "Move Point");
-                path.MovePoint(i, newPos);
+                Handles.color = (i % 3 == 0) ? creator.anchorCol : creator.controlColor;
+                float handleSize = (i % 3 == 0) ? creator.anchorDiameter : creator.controlDiameter;
+                Vector3 newPos = Handles.FreeMoveHandle(path[i], Quaternion.identity, handleSize, new Vector3(0, 1000000000000000000, 0), Handles.CylinderHandleCap);
+                if (path[i] != newPos)
+                {
+                    Undo.RecordObject(creator, "Move Point");
+                    path.MovePoint(i, newPos);
+                }
             }
         }
     }
@@ -109,12 +171,36 @@ public class PathEditor : Editor
         path = creator.path;
         if (path.NumSegments < 10)
         {
-            for (int i = 1; i <manager.hull.Count; i++)
+            for (int i = 2; i <manager.hull.Count; i++)
             {
                // Debug.Log(manager.hull.Count);
                 path.AddSegment(manager.hull[i]);
                 SceneView.RepaintAll();
+                //path.AutoSetAllControlPoints();
+                //path.ToggleClosed();
             }
         }
+    }
+    void Restart()
+    {
+        Debug.Log(creator.path == null);
+        Vector3 temp = manager.hull[0];
+        Vector3 temp2 = manager.hull[1];
+        creator.CreatePath(temp, temp2);
+        
+
+        path = creator.path;
+        if (path.NumSegments < 10)
+        {
+            for (int i = 2; i < manager.hull.Count; i++)
+            {
+                // Debug.Log(manager.hull.Count);
+                path.AddSegment(manager.hull[i]);
+                SceneView.RepaintAll();            
+                
+            }
+        }
+        path.IsClosed = true;
+        path.AutoSetAllControlPoints();
     }
 }

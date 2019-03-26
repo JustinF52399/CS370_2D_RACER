@@ -7,6 +7,13 @@ public class PathCreator : MonoBehaviour
 
     
     public Path path;
+    public Color anchorCol = Color.red;
+    public Color controlColor = Color.white;
+    public Color segmentColor = Color.green;
+    public Color selectedSegmentColor = Color.yellow;
+    public float anchorDiameter = .1f;
+    public float controlDiameter = .075f;
+    public bool displayControlPoints = true;
 
 
     public void CreatePath(Vector3 p1, Vector3 p2)
