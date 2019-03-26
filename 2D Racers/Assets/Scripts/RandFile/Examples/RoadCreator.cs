@@ -13,11 +13,11 @@ public class RoadCreator : MonoBehaviour
     
 
 
-    public void updateRoad()
+    public void updateRoad(Path path)
     {
 
         Debug.Log("IMMA DO IT");
-        Path path = GetComponent<PathCreator>().path;
+        //Path path = GetComponent<PathCreator>().path;
         Vector3[] points = path.CalculateEvenlySpacedPoints(spacing);
         GetComponent<MeshFilter>().mesh = CreateRoadMesh(points,path.IsClosed);
 

@@ -11,7 +11,7 @@ public class RoadEditor : Editor
     {
         if(creator.autoUpdate && Event.current.type == EventType.Repaint)
         {
-            creator.updateRoad();
+           // creator.updateRoad();
         }
     }
 
