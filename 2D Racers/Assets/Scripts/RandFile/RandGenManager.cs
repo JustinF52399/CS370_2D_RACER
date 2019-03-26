@@ -36,7 +36,7 @@ public class RandGenManager
         {
             //get a random x, y, and z from -150 to 150
             xRand = Random.Range(-150f, 150f);
-            yRand = 0;
+            yRand = Random.Range(20f, 32f);
             zRand = Random.Range(-150f, 150f);
 
             //Print those values to debug
@@ -54,14 +54,16 @@ public class RandGenManager
 
         //Generate the convex hull based on points
         hull = convexHull(sortedPoints, 0, randVal);
-  
+
+      
 
         //for loop to push several points apart
         int pushIterator = 3;
         for (int i = 0; i < pushIterator; i++)
         {
             pullPointsApart(hull);
-       }
+        }
+
 
         //add more points to the convex hull
         List<Vector3> rSet = new List<Vector3>(hull.Capacity * 2);
@@ -103,15 +105,7 @@ public class RandGenManager
         //adds curves to track
         //splineCode(hull);
 
-        //lifts y coordinates
-        for (int i = 0; i < hull.Count; i++)
-        {
-            float xVal = hull[i].x;
-            float yVal = Random.Range(0f, 10f);
-            float zVal = hull[i].z;
-
-            hull[i].Set(xVal, yVal, zVal);
-        }
+       
 
         //debugs
         //for (int i = 0; i < rSet.Count; i++)
@@ -121,8 +115,8 @@ public class RandGenManager
         ClockwiseVector3Comparer sorter = new ClockwiseVector3Comparer();
         hull.Sort(sorter);
 
-       
-        for (int i= hull.Count - 1; i >0; i--)
+
+        for (int i = hull.Count - 1; i > 0; i--)
         {
             if (hull[i] == hull[i - 1])
             {
@@ -132,6 +126,18 @@ public class RandGenManager
         for (int i = 0; i < hull.Count; i++)
         {
             Debug.Log(hull[i]);
+        }
+    }
+
+    private void liftY()
+    {
+        for (int i = 0; i < hull.Count; i++)
+        {
+            float xVal = hull[i].x;
+            yRand = Random.Range(0f, 10f);
+            float zVal = hull[i].z;
+
+            hull[i].Set(xVal, yRand, zVal);
         }
     }
 
