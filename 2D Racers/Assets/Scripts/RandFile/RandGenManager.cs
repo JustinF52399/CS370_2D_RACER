@@ -11,13 +11,11 @@ public class RandGenManager
     List<Vector3> points = new List<Vector3>();
     public List<Vector3> hull = new List<Vector3>();
     public List<Vector3> sortedPoints = new List<Vector3>();
-    public CatmullRom spline;
     List<Transform> sortedTrans = new List<Transform>();
     float easy = 1f;
     float med = .5f;
     float hard = .25f;
     Path path;
-    PathEditor editor;
 
     // Start is called before the first frame update
     public void Start()

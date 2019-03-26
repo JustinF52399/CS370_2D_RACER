@@ -37,12 +37,6 @@ public class RoadGenerator : MonoBehaviour
             path.ToggleClosed();
         }
         Vector3[] points = path.CalculateEvenlySpacedPoints(spacing);
-        foreach (Vector3 p in points)
-        {
-            GameObject g = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-            g.transform.position = p;
-            g.transform.localScale = Vector3.one * .75f;
-        }
         GetComponent<MeshFilter>().mesh = CreateRoadMesh(points, path.IsClosed);
 
     }
