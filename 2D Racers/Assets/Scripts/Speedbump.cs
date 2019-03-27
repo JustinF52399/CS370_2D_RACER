@@ -23,7 +23,6 @@ public class Speedbump : MonoBehaviour
 
     private void OnTriggerStay(Collider collider)
     {
-        print(rb.velocity);
         rb.velocity = newspeed;
     }
 }
