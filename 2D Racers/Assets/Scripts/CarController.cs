@@ -56,6 +56,8 @@ public class CarController : MonoBehaviour
         float vert = Input.GetAxis("Vertical");
         float horiz = Input.GetAxis("Horizontal");
 
+        car_rb.AddForce(-transform.up* 100f * car_rb.velocity.magnitude);
+
         foreach(Axle axle in axles){
             // Handle Steering
             if (axle.steers){

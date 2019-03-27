@@ -8,9 +8,9 @@ public class CameraController : MonoBehaviour
 
     private Camera cam;
 
-    public Vector3 offset = Vector3.zero;
+    public Vector3 rotation_offset;
+    public Vector3 position_offset;
 
-    public Vector3 currentPos = new Vector3(0f, 10f, 3f);
     // Start is called before the first frame update
     void Start()
     {
@@ -22,18 +22,16 @@ public class CameraController : MonoBehaviour
         MoveToTarget();
     }
 
-    void LookAtTarget()
-    {
-        Vector3 direction = target.position - transform.position;
-        Quaternion rotation = Quaternion.LookRotation(direction, Vector3.up);
-        transform.rotation = Quaternion.Lerp(transform.rotation, rotation, 2.5f * Time.deltaTime);
+    void LookAtTarget(){
+        Quaternion rotation = Quaternion.Euler(rotation_offset.x, target.eulerAngles.y + rotation_offset.y, rotation_offset.z);
+        transform.rotation = rotation;
     }
 
     void MoveToTarget(){
         Vector3 pos = target.position + 
-                      target.forward * offset.z +
-                      target.right * offset.x + 
-                      target.up * offset.y;
-        transform.position = Vector3.Lerp(transform.position, pos, 2.5f * Time.deltaTime);
+                      target.forward * position_offset.z +
+                      target.right * position_offset.x + 
+                      target.up * position_offset.y;
+        transform.position = pos;
     }
 }
