@@ -61,14 +61,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Scripts\CarController.cs" />
+    <Compile Include="Assets\Scripts\Car\CameraController.cs" />
+    <Compile Include="Assets\Scripts\Car\CarController.cs" />
+    <Compile Include="Assets\Scripts\MainMenu\MainMenu.cs" />
+    <Compile Include="Assets\Scripts\MainMenu\MouseHover.cs" />
+    <Compile Include="Assets\Scripts\MainMenu\PlayMenu.cs" />
     <Compile Include="Assets\Scripts\Point.cs" />
     <Compile Include="Assets\Scripts\Point1.cs" />
     <Compile Include="Assets\Scripts\Point2.cs" />
     <Compile Include="Assets\Scripts\Point3.cs" />
     <Compile Include="Assets\Scripts\Point4.cs" />
     <Compile Include="Assets\Scripts\Point5.cs" />
-    <Compile Include="Assets\Scripts\PracticeTrackGenerator.cs" />
     <Compile Include="Assets\Scripts\RandFile\Bezier.cs" />
     <Compile Include="Assets\Scripts\RandFile\Examples\PathPlacer.cs" />
     <Compile Include="Assets\Scripts\RandFile\Examples\RoadCreator.cs" />
@@ -76,8 +79,8 @@
     <Compile Include="Assets\Scripts\RandFile\PathCreator.cs" />
     <Compile Include="Assets\Scripts\RandFile\RandGenManager.cs" />
     <Compile Include="Assets\Scripts\RandFile\RoadGenerator.cs" />
-    <Compile Include="Assets\Scripts\RandFile\StartManager.cs" />
     <Compile Include="Assets\Scripts\RandFile\Vertex.cs" />
+    <Compile Include="Assets\Scripts\RoadGen.cs" />
     <Compile Include="Assets\Scripts\Speedbump.cs" />
     <Reference Include="Unity.TextMeshPro.Editor">
       <HintPath>C:/Users/jdude/Documents/2D Racers/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>

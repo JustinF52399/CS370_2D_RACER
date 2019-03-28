@@ -34,7 +34,7 @@ public class RandGenManager
         {
             //get a random x, y, and z from -150 to 150
             xRand = Random.Range(-150f, 150f);
-            yRand = Random.Range(20f, 32f);
+            yRand = Random.Range(20f, 25f);
             zRand = Random.Range(-150f, 150f);
 
             //Print those values to debug
