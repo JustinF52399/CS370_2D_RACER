@@ -34,4 +34,21 @@ public class CameraController : MonoBehaviour
                       target.up * position_offset.y;
         transform.position = pos;
     }
+
+    void LookAtTarget(Camera c)
+    {
+        cam = c;
+        Quaternion rotation = Quaternion.Euler(rotation_offset.x, target.eulerAngles.y + rotation_offset.y, rotation_offset.z);
+        transform.rotation = rotation;
+    }
+
+    void MoveToTarget(Camera c)
+    {
+        cam = c;
+        Vector3 pos = target.position +
+                      target.forward * position_offset.z +
+                      target.right * position_offset.x +
+                      target.up * position_offset.y;
+        transform.position = pos;
+    }
 }

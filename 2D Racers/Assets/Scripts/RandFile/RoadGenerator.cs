@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 [RequireComponent(typeof(MeshFilter))]
 [RequireComponent(typeof(MeshRenderer))]
+[RequireComponent(typeof(MeshCollider))]
 
 public class RoadGenerator : MonoBehaviour
 {
@@ -14,6 +15,12 @@ public class RoadGenerator : MonoBehaviour
     public float spacing = 1;
     public float roadWidth = 10;
     public bool autoUpdate;
+    public GameObject car;
+    public GameObject trafficCone;
+    public GameObject wall;
+    public GameObject barrel;
+    public GameObject speedBump;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -37,22 +44,42 @@ public class RoadGenerator : MonoBehaviour
             path.ToggleClosed();
         }
         Vector3[] points = path.CalculateEvenlySpacedPoints(spacing);
-        foreach (Vector3 p in points)
-        {
-            GameObject g = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-            g.transform.position = p;
-            g.transform.localScale = Vector3.one * .75f;
-        }
-        GetComponent<MeshFilter>().mesh = CreateRoadMesh(points, path.IsClosed);
+        Mesh mesh = CreateRoadMesh(points, path.IsClosed);
+        GetComponent<MeshFilter>().mesh = mesh;
+        GetComponent<MeshCollider>().sharedMesh = mesh;
 
+        GenerateObjects();
     }
 
-    // Update is called once per frame
-    void Update()
+    void GenerateObjects()
     {
-        
+        Vector3 spawnPos;
+        int yOffest = 152;
+        int xOffset = -20;
+        int zOffset = 23;
+
+        spawnPos = manager.hull[0];
+        spawnPos.y += yOffest;
+        spawnPos.x += xOffset;
+        spawnPos.z += zOffset;
+        Instantiate(car, spawnPos, new Quaternion());
+
+ 
+        for(int i = 0; i < manager.hull.Count; i++)
+        {
+            GameObject obj = trafficCone;
+            float val = Random.Range(1f, 4.5f);
+            int choose = (int)Mathf.Floor(val);
+
+            spawnPos = manager.hull[i];
+            spawnPos.y += yOffest;
+            spawnPos.x += xOffset;
+            spawnPos.z += zOffset;
+            Instantiate(obj, spawnPos, new Quaternion());
+        }
     }
-    Mesh CreateRoadMesh(Vector3[] pnts, bool isClosed)
+
+Mesh CreateRoadMesh(Vector3[] pnts, bool isClosed)
     {
 
         Vector3[] vertecies = new Vector3[pnts.Length * 2];
@@ -102,5 +129,5 @@ public class RoadGenerator : MonoBehaviour
 
         return mesh;
 
-    }
+    }   
 }

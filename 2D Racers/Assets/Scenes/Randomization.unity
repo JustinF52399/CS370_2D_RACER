@@ -162,7 +162,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 60
+  field of view: 92
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -188,7 +188,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 750472973}
   m_LocalRotation: {x: 0.6194365, y: 0, z: 0, w: 0.78504676}
-  m_LocalPosition: {x: 0, y: 376.2, z: -10}
+  m_LocalPosition: {x: -27.3, y: 372, z: -45}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -290,8 +290,9 @@ GameObject:
   - component: {fileID: 1900374664}
   - component: {fileID: 1900374667}
   - component: {fileID: 1900374666}
+  - component: {fileID: 1900374668}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: GenObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -312,6 +313,13 @@ MonoBehaviour:
   spacing: 5.2
   roadWidth: 9.8
   autoUpdate: 1
+  car: {fileID: 8000235658138194933, guid: db53d6fda473dd040955d2a79bbc9421, type: 3}
+  trafficCone: {fileID: 6312431671013733258, guid: 961ee9c9ada959f49a93ea6a4d631943,
+    type: 3}
+  wall: {fileID: 7986898313788519742, guid: 9b19286007e09d540b7aa4eebda6857d, type: 3}
+  barrel: {fileID: 5738737274825603999, guid: d92c6502d6bb68a41b2b1385006fc466, type: 3}
+  speedBump: {fileID: 8268056027557478583, guid: b0382ce5739293148847d236c3b996f1,
+    type: 3}
 --- !u!4 &1900374665
 Transform:
   m_ObjectHideFlags: 0
@@ -370,6 +378,20 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1900374663}
+  m_Mesh: {fileID: 0}
+--- !u!64 &1900374668
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1900374663}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 0
+  m_CookingOptions: 14
   m_Mesh: {fileID: 0}
 --- !u!1 &1947337790
 GameObject:
