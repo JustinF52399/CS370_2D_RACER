@@ -15,7 +15,7 @@ public class Axle {
 public class CarController : MonoBehaviour
 {
     public List<Axle> axles;
-    public float maxTorque = 5000, incrementTorque = 500f;
+    public float maxTorque = 500f;
     public float maxRotationAngle = 45f;
 
     public Rigidbody car_rb;
@@ -25,6 +25,11 @@ public class CarController : MonoBehaviour
     void Start()
     {
         car_rb = GetComponent<Rigidbody>();
+
+        foreach(Axle axle in axles){
+            axle.leftWheel.ConfigureVehicleSubsteps(1, 12, 15);
+            axle.rightWheel.ConfigureVehicleSubsteps(1, 12, 15);
+        }
     }
 
     private void AntiRoll(Axle axle)
@@ -57,7 +62,7 @@ public class CarController : MonoBehaviour
         float vert = Input.GetAxis("Vertical");
         float horiz = Input.GetAxis("Horizontal");
 
-        car_rb.AddForce(-transform.up* downforce * car_rb.velocity.magnitude);
+        car_rb.AddForce(-transform.up* downforce);
 
         foreach(Axle axle in axles){
             // Handle Steering
@@ -67,10 +72,8 @@ public class CarController : MonoBehaviour
             }
             // Handle Acceleration
             if (axle.powered){
-                if (axle.leftWheel.motorTorque < maxTorque){
-                    axle.leftWheel.motorTorque += vert * incrementTorque;
-                    axle.rightWheel.motorTorque += vert * incrementTorque;
-                }
+                axle.leftWheel.motorTorque = vert * maxTorque;
+                axle.rightWheel.motorTorque = vert * maxTorque;
             }
             AntiRoll(axle);
         }

@@ -62,7 +62,10 @@ public class RoadGenerator : MonoBehaviour
         spawnPos.y += yOffest;
         spawnPos.x += xOffset;
         spawnPos.z += zOffset;
-        Instantiate(car, spawnPos, new Quaternion());
+
+        Vector3 firstPoint = manager.sortedPoints[1] + spawnPos;
+
+        Instantiate(car, spawnPos, new Quaternion(0f, Vector3.Angle(spawnPos, firstPoint), 0f, 0f));
 
  
         for(int i = 0; i < manager.hull.Count; i++)

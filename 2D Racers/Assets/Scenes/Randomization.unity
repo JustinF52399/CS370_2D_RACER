@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481694, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -123,6 +123,7 @@ GameObject:
   - component: {fileID: 750472976}
   - component: {fileID: 750472975}
   - component: {fileID: 750472974}
+  - component: {fileID: 750472977}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -194,6 +195,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 76.55, y: 0, z: 0}
+--- !u!114 &750472977
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 750472973}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c71e15ae67ce2034f874cd9895503c98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rotation_offset: {x: 15, y: 0, z: 0}
+  position_offset: {x: 0, y: 3, z: -10}
 --- !u!1001 &1361550388
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -311,9 +326,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spacing: 5.2
-  roadWidth: 9.8
+  roadWidth: 30
   autoUpdate: 1
-  car: {fileID: 8000235658138194933, guid: db53d6fda473dd040955d2a79bbc9421, type: 3}
+  car: {fileID: 1134296140, guid: 7aaf4d04f4f4e78458a3e4487678d597, type: 3}
   trafficCone: {fileID: 6312431671013733258, guid: 961ee9c9ada959f49a93ea6a4d631943,
     type: 3}
   wall: {fileID: 7986898313788519742, guid: 9b19286007e09d540b7aa4eebda6857d, type: 3}

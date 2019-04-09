@@ -4,17 +4,18 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-    public Transform target;
+    private Transform target;
 
     private Camera cam;
 
-    public Vector3 rotation_offset;
-    public Vector3 position_offset;
+    public Vector3 rotation_offset = new Vector3(15f, 0f, 0f);
+    public Vector3 position_offset = new Vector3(0f, 3f, -10f);
 
     // Start is called before the first frame update
     void Start()
     {
         cam = Camera.main;
+        target = GameObject.FindWithTag("Player").transform;
     }
 
     private void LateUpdate(){
@@ -31,23 +32,6 @@ public class CameraController : MonoBehaviour
         Vector3 pos = target.position + 
                       target.forward * position_offset.z +
                       target.right * position_offset.x + 
-                      target.up * position_offset.y;
-        transform.position = pos;
-    }
-
-    void LookAtTarget(Camera c)
-    {
-        cam = c;
-        Quaternion rotation = Quaternion.Euler(rotation_offset.x, target.eulerAngles.y + rotation_offset.y, rotation_offset.z);
-        transform.rotation = rotation;
-    }
-
-    void MoveToTarget(Camera c)
-    {
-        cam = c;
-        Vector3 pos = target.position +
-                      target.forward * position_offset.z +
-                      target.right * position_offset.x +
                       target.up * position_offset.y;
         transform.position = pos;
     }
