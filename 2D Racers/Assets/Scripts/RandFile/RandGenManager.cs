@@ -8,13 +8,10 @@ public class RandGenManager
     float xRand;
     float yRand;
     float zRand;
-    List<Vector3> points = new List<Vector3>();
+    public List<Vector3> points = new List<Vector3>();
     public List<Vector3> hull = new List<Vector3>();
     public List<Vector3> sortedPoints = new List<Vector3>();
     List<Transform> sortedTrans = new List<Transform>();
-    float easy = 1f;
-    float med = .5f;
-    float hard = .25f;
     Path path;
 
     // Start is called before the first frame update
@@ -29,29 +26,17 @@ public class RandGenManager
         Random.InitState(seed);
         //Debug.Log(Random.seed.ToString());
         int randVal = Random.RandomRange(10, 20);
-        //for rand iterations create rand new points of random positions and put them in a list
-        for (int i = 0; i < randVal; i++)
+  
+        for (int i = 1; i <= 4; i++)
         {
-            //get a random x, y, and z from -150 to 150
-            xRand = Random.Range(-150f, 150f);
-            yRand = Random.Range(20f, 25f);
-            zRand = Random.Range(-150f, 150f);
-
-            //Print those values to debug
-            //Debug.Log("(Point " + i + ") x: " + xRand.ToString() + " z: " + zRand.ToString());
-
-            //create a temporary point
-            Vector3 temp = new Vector3(xRand, yRand, zRand);
-
-            //adds it to list
-            points.Add(temp);
+            GenPointByQuadrent(i, (int)randVal / 4);
         }
 
         //sort list of Vector3
         sortedPoints = sortByXZ(points);
 
         //Generate the convex hull based on points
-        hull = convexHull(sortedPoints, 0, randVal);
+        //hull = convexHull(sortedPoints, 0, randVal);
 
       
 
@@ -66,7 +51,6 @@ public class RandGenManager
         //add more points to the convex hull
         List<Vector3> rSet = new List<Vector3>(hull.Capacity * 2);
         Vector3 disp = new Vector3();
-        float diff = easy;
         float maxDisp = 20f;
         //for (int i = 0; i < hull.Count; i++)
         //{
@@ -125,6 +109,7 @@ public class RandGenManager
         {
             Debug.Log(hull[i]);
         }
+        hull = points;
     }
 
     private void liftY()
@@ -311,6 +296,94 @@ public class RandGenManager
         float xd = v1.x - v2.x;
         float zd = v1.z - v2.z;
         return (xd * xd) + (zd * zd);
+    }
+
+    private void GenPointByQuadrent(int quadrent = 1, int numPoints = 0) 
+    {
+        List<Vector3> tempo = new List<Vector3>();
+        switch (quadrent)
+        {
+            case 1:
+                for (int i = 0; i < numPoints; i++)
+                {
+                    //get a random x and z in quadrent 1
+                    xRand = Random.Range(0f, 500f);
+                    yRand = Random.Range(20f, 25f);
+                    zRand = Random.Range(0f, 500f);
+
+                    //Print those values to debug
+                    //Debug.Log("(Point " + i + ") x: " + xRand.ToString() + " z: " + zRand.ToString());
+
+                    //create a temporary point
+                    Vector3 temp = new Vector3(xRand, yRand, zRand);
+
+                    //adds it to list
+                    tempo.Add(temp);
+                    
+                }
+                tempo.Sort((a, b) => a.z.CompareTo(b.z));
+                break;
+            case 2:
+                for (int i = 0; i < numPoints; i++)
+                {
+                    //get a random x and z in quadrent 2
+                    xRand = Random.Range(-500f, 0f);
+                    yRand = Random.Range(20f, 25f);
+                    zRand = Random.Range(0f, 500f);
+
+                    //Print those values to debug
+                    //Debug.Log("(Point " + i + ") x: " + xRand.ToString() + " z: " + zRand.ToString());
+
+                    //create a temporary point
+                    Vector3 temp = new Vector3(xRand, yRand, zRand);
+
+                    //adds it to list
+                    tempo.Add(temp);
+                }
+                tempo.Sort((a, b) => b.z.CompareTo(a.z));
+                break;
+            case 3:
+                for (int i = 0; i < numPoints; i++)
+                {
+                    //get a random x and z in quadrent 3
+                    xRand = Random.Range(-500f, 0f);
+                    yRand = Random.Range(20f, 25f);
+                    zRand = Random.Range(-500f, 0f);
+
+                    //Print those values to debug
+                    //Debug.Log("(Point " + i + ") x: " + xRand.ToString() + " z: " + zRand.ToString());
+
+                    //create a temporary point
+                    Vector3 temp = new Vector3(xRand, yRand, zRand);
+
+                    //adds it to list
+                    tempo.Add(temp);
+                }
+                tempo.Sort((a, b) => b.z.CompareTo(a.z));
+                break;
+            case 4:
+                for (int i = 0; i < numPoints; i++)
+                {
+                    //get a random x and z in quadrent 4
+                    xRand = Random.Range(0f, 500f);
+                    yRand = Random.Range(20f, 25f);
+                    zRand = Random.Range(-500f, 0f);
+
+                    //Print those values to debug
+                    //Debug.Log("(Point " + i + ") x: " + xRand.ToString() + " z: " + zRand.ToString());
+
+                    //create a temporary point
+                    Vector3 temp = new Vector3(xRand, yRand, zRand);
+
+                    //adds it to list
+                    tempo.Add(temp);
+                }
+                tempo.Sort((a, b) => a.z.CompareTo(b.z));
+                break;
+        }
+        foreach(Vector3 i in tempo){
+            points.Add(i);
+        }
     }
 
     private bool ccw(Vector3 first, Vector3 second, Vector3 origin)

@@ -311,7 +311,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spacing: 5.2
-  roadWidth: 9.8
+  roadWidth: 30
   autoUpdate: 1
   car: {fileID: 8000235658138194933, guid: db53d6fda473dd040955d2a79bbc9421, type: 3}
   trafficCone: {fileID: 6312431671013733258, guid: 961ee9c9ada959f49a93ea6a4d631943,
