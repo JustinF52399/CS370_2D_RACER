@@ -325,7 +325,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b60b7a3df9cad2c44a3215d4d10a7e5c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spacing: 5.2
+  spacing: 15
   roadWidth: 30
   autoUpdate: 1
   car: {fileID: 1134296140, guid: 7aaf4d04f4f4e78458a3e4487678d597, type: 3}
