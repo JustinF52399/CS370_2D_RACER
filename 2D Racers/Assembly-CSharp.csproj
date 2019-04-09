@@ -78,7 +78,11 @@
     <Compile Include="Assets\Scripts\RandFile\Path.cs" />
     <Compile Include="Assets\Scripts\RandFile\PathCreator.cs" />
     <Compile Include="Assets\Scripts\RandFile\RandGenManager.cs" />
+    <Compile Include="Assets\Scripts\RandFile\RandGenManagerHard.cs" />
+    <Compile Include="Assets\Scripts\RandFile\RandGenManagerMedium.cs" />
     <Compile Include="Assets\Scripts\RandFile\RoadGenerator.cs" />
+    <Compile Include="Assets\Scripts\RandFile\RoadGeneratorHard.cs" />
+    <Compile Include="Assets\Scripts\RandFile\RoadGeneratorMedium.cs" />
     <Compile Include="Assets\Scripts\RandFile\Vertex.cs" />
     <Compile Include="Assets\Scripts\RoadGen.cs" />
     <Compile Include="Assets\Scripts\Speedbump.cs" />
