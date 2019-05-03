@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: b7abb8af9367d5c4bb47e89588c153e9
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - car: {fileID: 1134296140, guid: 7aaf4d04f4f4e78458a3e4487678d597, type: 3}
+  - trafficCone: {instanceID: 0}
+  - wall: {instanceID: 0}
+  - barrel: {instanceID: 0}
+  - speedBump: {instanceID: 0}
+  executionOrder: 50
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
